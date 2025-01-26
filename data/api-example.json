@@ -1,0 +1,46 @@
+{
+  "notFound": { "meta": { "status": 200 }, "data": [] },
+  "found": {
+    "meta": { "status": 200 },
+    "data": [
+      {
+        "slug": "四捨五入",
+        "is_common": true,
+        "tags": [],
+        "jlpt": ["jlpt-n2"],
+        "japanese": [{ "word": "四捨五入", "reading": "ししゃごにゅう" }],
+        "senses": [
+          {
+            "english_definitions": [
+              "rounding (off; a number)",
+              "rounding half away from zero"
+            ],
+            "parts_of_speech": ["Noun", "Suru verb", "Transitive verb"],
+            "links": [],
+            "tags": [],
+            "restrictions": [],
+            "see_also": [],
+            "antonyms": [],
+            "source": [],
+            "info": []
+          },
+          {
+            "english_definitions": [
+              "rounding off (views)",
+              "converging to a common opinion"
+            ],
+            "parts_of_speech": ["Noun", "Suru verb", "Transitive verb"],
+            "links": [],
+            "tags": [],
+            "restrictions": [],
+            "see_also": [],
+            "antonyms": [],
+            "source": [],
+            "info": []
+          }
+        ],
+        "attribution": { "jmdict": true, "jmnedict": false, "dbpedia": false }
+      }
+    ]
+  }
+}

@@ -36,6 +36,7 @@ const config = {
         },
       },
     ],
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
   },
 }
 module.exports = config
