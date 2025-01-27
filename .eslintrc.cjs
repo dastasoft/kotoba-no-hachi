@@ -4,7 +4,12 @@ const config = {
   parserOptions: {
     project: true,
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: [
+    '@typescript-eslint',
+    'unused-imports',
+    'simple-import-sort',
+    'prettier',
+  ],
   extends: [
     'next/core-web-vitals',
     'plugin:@typescript-eslint/recommended-type-checked',
@@ -37,6 +42,10 @@ const config = {
       },
     ],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'simple-import-sort/imports': 'warn',
+    'simple-import-sort/exports': 'warn',
+    'unused-imports/no-unused-imports': 'warn',
+    'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
   },
 }
 module.exports = config

@@ -1,12 +1,10 @@
 import { type ApiResponse } from '../types/dictionary.type'
 
-const PROXY = 'https://cors-proxy.fringe.zone/'
-const ENDPOINT = 'https://jisho.org/api/v1/search/words?keyword='
 const WILDCARD = '%3F'
 
 export type KanaMatchState = 'NO_MATCH' | 'MATCH' | 'INVALID_INPUT'
 
-const generateQueryString = (middleKana: string): string => {
+const generateQueryString = (middleKana: string | undefined): string => {
   const placeholders = Array(7).fill(WILDCARD)
   const randomIndex = Math.floor(Math.random() * placeholders.length)
 
@@ -18,9 +16,9 @@ const generateQueryString = (middleKana: string): string => {
 
 export async function isMatch(
   inputWord: string,
-  middleKana: string,
+  middleKana: string | undefined,
 ): Promise<KanaMatchState> {
-  if (inputWord.length < 2 || !inputWord.includes(middleKana))
+  if (inputWord.length < 2 || !middleKana || !inputWord.includes(middleKana))
     return 'INVALID_INPUT'
 
   const response = await fetchWord(inputWord)
@@ -28,13 +26,15 @@ export async function isMatch(
 }
 
 export const fetchWord = async (word: string) => {
-  const response = await fetch(`${PROXY}${ENDPOINT}${word}`)
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_PROXY}${process.env.NEXT_PUBLIC_ENDPOINT}${word}`,
+  )
   return (await response.json()) as ApiResponse
 }
 
-export const fetchWordsByKana = async (kana: string) => {
+export const fetchWordsByKana = async (kana: string | undefined) => {
   const response = await fetch(
-    `${PROXY}${ENDPOINT}${generateQueryString(kana)}`,
+    `${process.env.NEXT_PUBLIC_PROXY}${process.env.NEXT_PUBLIC_ENDPOINT}${generateQueryString(kana)}`,
   )
   return (await response.json()) as ApiResponse
 }
