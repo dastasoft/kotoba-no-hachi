@@ -24,16 +24,17 @@ const Game = () => {
     switch (matchState) {
       case 'MATCH':
         // TODO consume this to show the translations
-        console.log('Correct!!', details)
+        alert('Correct!!')
+        console.log(details)
         increment(word)
         clean()
         break
       case 'NO_MATCH':
-        console.log('Incorrect!')
+        alert('Incorrect!')
         break
       case 'INVALID_INPUT':
       default:
-        console.log('Invalid input!')
+        alert('Invalid input!')
         break
     }
   }
