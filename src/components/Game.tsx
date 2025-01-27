@@ -19,27 +19,27 @@ const Game = () => {
   }
 
   const submit = async () => {
-    const matchState = await isMatch(word, middleKana)
+    const { status: matchState, details } = await isMatch(word, middleKana)
 
     switch (matchState) {
       case 'MATCH':
-        alert('Correct!')
+        // TODO consume this to show the translations
+        console.log('Correct!!', details)
         increment(word)
         clean()
         break
       case 'NO_MATCH':
-        alert('Incorrect!')
+        console.log('Incorrect!')
         break
       case 'INVALID_INPUT':
       default:
-        alert('Invalid input!')
+        console.log('Invalid input!')
         break
     }
   }
 
   return (
     <div className="flex h-full w-full flex-col items-center space-y-4 p-4">
-      <h1 className="text-4xl font-bold text-black">言葉の蜂</h1>
       <p className="text-lg text-gray-700">Score: {score}</p>
       <div className="flex w-full max-w-md flex-1 flex-col">
         {loading ? (
