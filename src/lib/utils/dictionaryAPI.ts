@@ -3,7 +3,8 @@ import { type ApiResponse } from '../types/dictionary.type'
 const WILDCARD = '%3F'
 
 export type KanaMatchState = 'NO_MATCH' | 'MATCH' | 'INVALID_INPUT'
-type Detail = {
+
+export type Detail = {
   slug: string
   translations: {
     english: string[] | undefined

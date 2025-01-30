@@ -1,9 +1,11 @@
 'use client'
 
+import { useState } from 'react'
+
 import { useGenerateKana } from '~/hooks/useGenerateKana'
 import { useScore } from '~/hooks/useScore'
 import { useWord } from '~/hooks/useWord'
-import { isMatch } from '~/lib/utils/dictionaryAPI'
+import { type Detail, isMatch } from '~/lib/utils/dictionaryAPI'
 
 import KanaGrid from './KanaGrid'
 
@@ -11,11 +13,15 @@ const Game = () => {
   const { word, addKana, clean } = useWord()
   const { score, increment, reset: resetScore } = useScore()
   const { kanaSet, middleKana, refreshKanaSet, loading } = useGenerateKana()
+  const [translations, setTranslations] = useState<Detail[] | undefined>(
+    undefined,
+  )
 
   const refresh = () => {
     void refreshKanaSet()
     clean()
     resetScore()
+    setTranslations(undefined)
   }
 
   const submit = async () => {
@@ -23,9 +29,9 @@ const Game = () => {
 
     switch (matchState) {
       case 'MATCH':
-        // TODO consume this to show the translations
         alert('Correct!!')
         console.log(details)
+        setTranslations(details)
         increment(word)
         clean()
         break
@@ -76,6 +82,22 @@ const Game = () => {
               >
                 Submit
               </button>
+            </div>
+            <div>
+              {translations?.map(({ slug, translations }) => {
+                return (
+                  <div key={slug}>
+                    <span>{slug}-</span>
+                    {translations.english?.map((value) => {
+                      return (
+                        <span key={value} className="mr-3">
+                          {value}
+                        </span>
+                      )
+                    })}
+                  </div>
+                )
+              })}
             </div>
           </>
         )}

@@ -11,8 +11,10 @@ const KanaButton = ({ kanaSet, onClick, middleKana }: KanaButtonProps) => {
         <button
           onClick={onClick(kana)}
           className={`clip-hexagon relative mx-0.5 flex h-28 w-28 items-center justify-center ${
-            kana === middleKana ? 'bg-red-500' : 'bg-cyan-500'
-          } transition-opacity hover:opacity-80`}
+            kana === middleKana
+              ? 'bg-cyan-500 hover:bg-cyan-600'
+              : 'bg-amber-300 hover:bg-amber-400'
+          } transition-opacity`}
           key={`${kana}-${index}`}
         >
           <span className="text-2xl font-bold text-black">{kana}</span>
