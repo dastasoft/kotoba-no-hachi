@@ -5,7 +5,8 @@ import { useState } from 'react'
 import { useGenerateKana } from '~/hooks/useGenerateKana'
 import { useScore } from '~/hooks/useScore'
 import { useWord } from '~/hooks/useWord'
-import { type Detail, isMatch } from '~/lib/utils/dictionaryAPI'
+import { type Dictionary } from '~/lib/types/dictionary.type'
+import { isMatch } from '~/lib/utils/dictionaryAPI'
 
 import KanaGrid from './KanaGrid'
 
@@ -13,7 +14,7 @@ const Game = () => {
   const { word, addKana, clean } = useWord()
   const { score, increment, reset: resetScore } = useScore()
   const { kanaSet, middleKana, refreshKanaSet, loading } = useGenerateKana()
-  const [translations, setTranslations] = useState<Detail[] | undefined>(
+  const [translations, setTranslations] = useState<Dictionary[] | undefined>(
     undefined,
   )
 
@@ -25,12 +26,14 @@ const Game = () => {
   }
 
   const submit = async () => {
-    const { status: matchState, details } = await isMatch(word, middleKana)
+    const { status: matchState, data: details } = await isMatch(
+      word,
+      middleKana,
+    )
 
     switch (matchState) {
       case 'MATCH':
         alert('Correct!!')
-        console.log(details)
         setTranslations(details)
         increment(word)
         clean()
@@ -84,17 +87,11 @@ const Game = () => {
               </button>
             </div>
             <div>
-              {translations?.map(({ slug, translations }) => {
+              {translations?.map(({ id, kanji, eng_translation }) => {
                 return (
-                  <div key={slug}>
-                    <span>{slug}-</span>
-                    {translations.english?.map((value) => {
-                      return (
-                        <span key={value} className="mr-3">
-                          {value}
-                        </span>
-                      )
-                    })}
+                  <div key={id}>
+                    <span>{kanji}-</span>
+                    <span>{eng_translation}</span>
                   </div>
                 )
               })}

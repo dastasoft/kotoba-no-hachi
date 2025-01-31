@@ -1,41 +1,10 @@
-type MetaType = {
-  status: number
-}
-
-type JapaneseType = {
-  word: string
-  reading: string
-}
-
-type SenseType = {
-  english_definitions: string[]
-  parts_of_speech: string[]
-  links: string[]
-  tags: string[]
-  restrictions: string[]
-  see_also: string[]
-  antonyms: string[]
-  source: string[]
-  info: string[]
-}
-
-type AttributionType = {
-  jmdict: boolean
-  jmnedict: boolean
-  dbpedia: boolean
-}
-
-type DataType = {
-  slug: string
-  is_common: boolean
-  tags: string[]
-  jlpt: string[]
-  japanese: JapaneseType[]
-  senses: SenseType[]
-  attribution: AttributionType
+export type Dictionary = {
+  id: string
+  kana: string
+  kanji: string
+  eng_translation: string
 }
 
 export type ApiResponse = {
-  meta: MetaType
-  data: DataType[]
+  data: Dictionary[]
 }
