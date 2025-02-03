@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const db = await openDb()
 
   try {
-    const items = await db.all(`SELECT * FROM words WHERE kana = "${word}"`)
+    const items = await db.all(`SELECT * FROM kana WHERE value = "${word}"`)
 
     return NextResponse.json({ data: items })
   } catch (error) {

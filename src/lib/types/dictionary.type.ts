@@ -1,10 +1,17 @@
 export type Dictionary = {
+  entry_id: string
   id: string
-  kana: string
-  kanji: string
-  eng_translation: string
+  no_kanji: string
+  value: string
 }
 
-export type ApiResponse = {
-  data: Dictionary[]
+export type KanjiDefinition = {
+  kanji_id: string
+  kanji: string
+  definition_id: string
+  definition: string
+}
+
+export type ApiResponse<T> = {
+  data: T[]
 }

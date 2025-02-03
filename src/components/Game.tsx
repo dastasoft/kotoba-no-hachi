@@ -5,18 +5,19 @@ import { useState } from 'react'
 import { useGenerateKana } from '~/hooks/useGenerateKana'
 import { useScore } from '~/hooks/useScore'
 import { useWord } from '~/hooks/useWord'
-import { type Dictionary } from '~/lib/types/dictionary.type'
+import { type KanjiDefinition } from '~/lib/types/dictionary.type'
 import { isMatch } from '~/lib/utils/dictionaryAPI'
 
 import KanaGrid from './KanaGrid'
+import TranslationsTable from './TranslationsTable'
 
 const Game = () => {
   const { word, addKana, clean } = useWord()
   const { score, increment, reset: resetScore } = useScore()
   const { kanaSet, middleKana, refreshKanaSet, loading } = useGenerateKana()
-  const [translations, setTranslations] = useState<Dictionary[] | undefined>(
-    undefined,
-  )
+  const [translations, setTranslations] = useState<
+    KanjiDefinition[] | undefined
+  >(undefined)
 
   const refresh = () => {
     void refreshKanaSet()
@@ -86,16 +87,7 @@ const Game = () => {
                 Submit
               </button>
             </div>
-            <div>
-              {translations?.map(({ id, kanji, eng_translation }) => {
-                return (
-                  <div key={id}>
-                    <span>{kanji}-</span>
-                    <span>{eng_translation}</span>
-                  </div>
-                )
-              })}
-            </div>
+            <TranslationsTable translations={translations} />
           </>
         )}
       </div>

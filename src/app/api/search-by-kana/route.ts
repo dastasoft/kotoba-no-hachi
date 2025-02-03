@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const items = await db.all(
-      `SELECT * FROM words WHERE LENGTH(kana) = 7 AND kana LIKE '%${kana}%'`,
+      `SELECT * FROM kana WHERE LENGTH(value) = 7 AND value LIKE '%${kana}%'`,
     )
 
     return NextResponse.json({ data: items })
