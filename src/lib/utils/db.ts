@@ -16,7 +16,7 @@ let db: Database | null = null
 export async function openDb() {
   if (!db) {
     db = await open({
-      filename: './data/JMdict_e.db',
+      filename: 'public/data/JMdict_e.db',
       driver: sqlite3.Database,
     })
   }
