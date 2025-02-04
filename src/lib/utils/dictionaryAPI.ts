@@ -1,29 +1,14 @@
-import { type ApiResponse } from '../types/dictionary.type'
-
-const WILDCARD = '%3F'
+import {
+  type ApiResponse,
+  type Dictionary,
+  type KanjiDefinition,
+} from '../types/dictionary.type'
 
 export type KanaMatchState = 'NO_MATCH' | 'MATCH' | 'INVALID_INPUT'
 
-export type Detail = {
-  slug: string
-  translations: {
-    english: string[] | undefined
-  }
-}
-
 type MatchResult = {
   status: KanaMatchState
-  details?: Detail[]
-}
-
-const generateQueryString = (middleKana: string | undefined): string => {
-  const placeholders = Array(7).fill(WILDCARD)
-  const randomIndex = Math.floor(Math.random() * placeholders.length)
-
-  placeholders[randomIndex] = middleKana
-  const queryString = placeholders.join('')
-
-  return `${queryString}`
+  data?: KanjiDefinition[]
 }
 
 export async function isMatch(
@@ -33,25 +18,28 @@ export async function isMatch(
   if (inputWord.length < 2 || !middleKana || !inputWord.includes(middleKana))
     return { status: 'INVALID_INPUT' }
 
-  const response = await fetchWord(inputWord)
-  const details = response.data.map(({ slug, senses }) => ({
-    slug,
-    translations: { english: senses[0]?.english_definitions },
-  }))
+  const { data } = await fetchWord(inputWord)
+  if (data.length === 0) return { status: 'NO_MATCH' }
 
-  return { status: response.data.length > 0 ? 'MATCH' : 'NO_MATCH', details }
+  const { data: kanjiAndDefition } = await fetchKanjiAndDefinition(inputWord)
+
+  return {
+    status: data.length > 0 ? 'MATCH' : 'NO_MATCH',
+    data: kanjiAndDefition,
+  }
 }
 
-export const fetchWord = async (word: string) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_PROXY}${process.env.NEXT_PUBLIC_ENDPOINT}"${word}"`,
-  )
-  return (await response.json()) as ApiResponse
+const fetchWord = async (word: string | undefined) => {
+  const response = await fetch(`/api/search-by-word?word=${word}`)
+  return (await response.json()) as ApiResponse<Dictionary>
 }
 
 export const fetchWordsByKana = async (kana: string | undefined) => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_PROXY}${process.env.NEXT_PUBLIC_ENDPOINT}${generateQueryString(kana)}`,
-  )
-  return (await response.json()) as ApiResponse
+  const response = await fetch(`/api/search-by-kana?kana=${kana}`)
+  return (await response.json()) as ApiResponse<Dictionary>
+}
+
+export const fetchKanjiAndDefinition = async (word: string | undefined) => {
+  const response = await fetch(`/api/search-kanji-definition?word=${word}`)
+  return (await response.json()) as ApiResponse<KanjiDefinition>
 }

@@ -5,17 +5,19 @@ import { useState } from 'react'
 import { useGenerateKana } from '~/hooks/useGenerateKana'
 import { useScore } from '~/hooks/useScore'
 import { useWord } from '~/hooks/useWord'
-import { type Detail, isMatch } from '~/lib/utils/dictionaryAPI'
+import { type KanjiDefinition } from '~/lib/types/dictionary.type'
+import { isMatch } from '~/lib/utils/dictionaryAPI'
 
 import KanaGrid from './KanaGrid'
+import TranslationsTable from './TranslationsTable'
 
 const Game = () => {
   const { word, addKana, clean } = useWord()
   const { score, increment, reset: resetScore } = useScore()
   const { kanaSet, middleKana, refreshKanaSet, loading } = useGenerateKana()
-  const [translations, setTranslations] = useState<Detail[] | undefined>(
-    undefined,
-  )
+  const [translations, setTranslations] = useState<
+    KanjiDefinition[] | undefined
+  >(undefined)
 
   const refresh = () => {
     void refreshKanaSet()
@@ -25,12 +27,14 @@ const Game = () => {
   }
 
   const submit = async () => {
-    const { status: matchState, details } = await isMatch(word, middleKana)
+    const { status: matchState, data: details } = await isMatch(
+      word,
+      middleKana,
+    )
 
     switch (matchState) {
       case 'MATCH':
         alert('Correct!!')
-        console.log(details)
         setTranslations(details)
         increment(word)
         clean()
@@ -83,22 +87,7 @@ const Game = () => {
                 Submit
               </button>
             </div>
-            <div>
-              {translations?.map(({ slug, translations }) => {
-                return (
-                  <div key={slug}>
-                    <span>{slug}-</span>
-                    {translations.english?.map((value) => {
-                      return (
-                        <span key={value} className="mr-3">
-                          {value}
-                        </span>
-                      )
-                    })}
-                  </div>
-                )
-              })}
-            </div>
+            <TranslationsTable translations={translations} />
           </>
         )}
       </div>
