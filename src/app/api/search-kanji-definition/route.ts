@@ -10,11 +10,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid word input' }, { status: 400 })
   }
 
-  const db = await openDb()
-
-  try {
-    const items = await db.all(
-      `SELECT 
+  const query = `SELECT 
       k.id AS kanji_id,
       k.value AS kanji, 
       d.id AS definition_id,
@@ -28,8 +24,11 @@ export async function GET(request: NextRequest) {
       JOIN 
         definition d ON s.id = d.sense_id
       WHERE 
-        ka.value = '${word}'`,
-    )
+        ka.value = '${word}'`
+
+  try {
+    const db = await openDb()
+    const items = await db.all(query)
 
     return NextResponse.json({ data: items })
   } catch (error) {

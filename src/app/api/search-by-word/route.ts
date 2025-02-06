@@ -10,10 +10,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid word input' }, { status: 400 })
   }
 
-  const db = await openDb()
+  const query = `SELECT * FROM kana WHERE value = "${word}"`
 
   try {
-    const items = await db.all(`SELECT * FROM kana WHERE value = "${word}"`)
+    const db = await openDb()
+    const items = await db.all(query)
 
     return NextResponse.json({ data: items })
   } catch (error) {
