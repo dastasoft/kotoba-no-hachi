@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = await open({
-      filename: 'public/data/JMdict_e.db',
+      filename: 'public/JMdict_e.db',
       driver: sqlite3.Database,
     })
 

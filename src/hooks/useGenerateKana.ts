@@ -14,13 +14,16 @@ export const useGenerateKana = () => {
 
     middleKanaRef.current = hiragana[(Math.random() * hiragana.length) | 0]!
     const { data } = await fetchWordsByKana(middleKanaRef.current)
-    const randomKanaArray =
-      data[(Math.random() * data.length) | 0]?.value.split('')
-    const shuffledKana = randomKanaArray?.sort(() => Math.random() - 0.5)
-    shuffledKana?.splice(shuffledKana.indexOf(middleKanaRef.current), 1)
-    shuffledKana?.splice(3, 0, middleKanaRef.current)
 
-    setKanaSet(shuffledKana)
+    if (data) {
+      const randomKanaArray =
+        data[(Math.random() * data.length) | 0]?.value.split('')
+      const shuffledKana = randomKanaArray?.sort(() => Math.random() - 0.5)
+      shuffledKana?.splice(shuffledKana.indexOf(middleKanaRef.current), 1)
+      shuffledKana?.splice(3, 0, middleKanaRef.current)
+
+      setKanaSet(shuffledKana)
+    }
 
     setLoading(false)
   }, [])
